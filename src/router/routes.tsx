@@ -5,7 +5,6 @@ import SalaryStatisticsPage from "../components/pages/SalaryStatisticsPage";
 import DepartmentStatisticsPage from "../components/pages/DepartmentStatisticsPage";
 import LayoutPage from "../components/pages/LayoutPage";
 import AddEmployeePage from "../components/pages/AddEmployeePage";
-import StatisticsPage from "../components/pages/StatisticsPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,7 +14,6 @@ const router = createBrowserRouter([
       { path: "add", element: <AddEmployeePage /> },
       {
         path: "statistics",
-        element: <StatisticsPage />,
         children: [
           { path: "age", element: <AgeStatisticsPage /> },
           { path: "salary", element: <SalaryStatisticsPage /> },
