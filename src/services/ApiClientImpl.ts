@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
 })
 class ApiClientJsonServer implements ApiClient {
     async getEmployees(config?: AxiosRequestConfig): Promise<Employee[]> {
-        const response = await axiosInstance.get<Employee[]>("employes", config);
+        const response = await axiosInstance.get<Employee[]>("employees", config);
         return response.data
     }
     addEmployee(empl: Employee): Promise<Employee> {
