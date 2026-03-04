@@ -25,7 +25,7 @@ const SalaryStatisticsPage = () => {
       value: +key * interval + interval,
     }));
     return data;
-  }, [employees, employeesConfig.salary.interval]);
+  }, [employees]);
   const chart = useChart({
     data,
     series: [{ name: "amount", color: "teal.solid" }],
@@ -45,7 +45,7 @@ const SalaryStatisticsPage = () => {
               axisLine={false}
               dataKey={chart.key("value")}
               stroke={chart.color("border")}
-              label={{ value: "Salary", position: "bottom" }}
+              label={{ value: "Salary(NIS)", position: "bottom" }}
             />
             <YAxis
               axisLine={false}
