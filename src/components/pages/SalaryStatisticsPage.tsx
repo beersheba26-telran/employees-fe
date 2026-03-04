@@ -25,7 +25,7 @@ const SalaryStatisticsPage = () => {
       value: +key * interval + interval,
     }));
     return data;
-  }, [employees]);
+  }, [employees, employeesConfig.salary.interval]);
   const chart = useChart({
     data,
     series: [{ name: "amount", color: "teal.solid" }],
