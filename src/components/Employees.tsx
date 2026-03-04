@@ -20,10 +20,10 @@ const Employees = () => {
             </Table.Header>
             <Table.Body>
               {employees.map((empl) => (
-                <Table.Row key={empl.id}>
+                <Table.Row key={empl.id} >
                   <Table.Cell hideBelow={"sm"} >
                     <Avatar.Root size={{sm:"sm", lg: "lg"}} >
-                      <Avatar.Fallback name={empl.fullName} />
+                      <Avatar.Fallback name={empl .fullName} />
                       <Avatar.Image src={empl.avatar} />
                     </Avatar.Root>
                   </Table.Cell>
