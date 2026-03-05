@@ -27,3 +27,5 @@ class AuthServiceDummy implements AuthService {
     }
     
 }
+const authService = new AuthServiceDummy()
+export default authService
