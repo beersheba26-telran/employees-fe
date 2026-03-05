@@ -4,16 +4,21 @@ import useEmployees from '../../services/hooks/useEmployees'
 import { DepartmentInfo } from '../../models/DepartmentInfo'
 import { Employee } from '../../models/Employee'
 import { useMemo } from 'react'
+import _ from "lodash"
+import { getAge } from '../../utils/date_functions'
 /**
  * 
  * @param employees
  * returns arry of DepartmentInfo objects 
  */
 function getDepartmentsInfo(employees: Employee[]): DepartmentInfo[] {
-  //TODO
-  // Applying the following lodash functions
-  // groupBy ; meanBy ;  round
-  return []
+  const groupObj = _.groupBy(employees, "department");
+  return Object.entries(groupObj).map(([key, value]) => ({
+    department: key,
+    nEmployees: value.length,
+    avgSalary: _.round(_.meanBy(value, "salary")),
+    avgAge: _.round(_.meanBy(value, (e) => getAge(e.birthdate))),
+  }));
   
 }
 const DepartmentStatisticsPage = () => {
