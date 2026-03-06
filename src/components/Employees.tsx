@@ -7,7 +7,8 @@ const Employees = () => {
     <>
       {isLoading && <Spinner></Spinner>}
       <Stack justifyContent={"center"} alignItems={"center"} height={"100%"}>
-        <Table.ScrollArea borderWidth="1px" rounded="md" height="75vh" width={{base:"95vw", md: "80vw"}}>
+        <Table.ScrollArea borderWidth="1px" rounded="md" height="75vh"
+         width={{base:"95vw", md: "80vw"}}>
           <Table.Root size={{base: "sm", sm: "md", lg: "lg"}} stickyHeader>
             <Table.Header>
               <Table.Row bg="bg.subtle">

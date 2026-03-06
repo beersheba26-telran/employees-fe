@@ -1,14 +1,19 @@
 import { HStack } from "@chakra-ui/react"
-import { NavLink } from "react-router-dom"
+import { Navigate, NavLink } from "react-router-dom"
 import StatisticsSelector from "./StatisticsSelector"
 import { ColorModeButton } from "./ui/color-mode"
+import { useUserData } from "../state-management/store"
 
 const AppBar = () => {
+  const {role, username} = useUserData()
   return (
     <HStack justifyContent={"space-evenly"}>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/add">Add Employee</NavLink>
-     <StatisticsSelector></StatisticsSelector>
+      {!!role && <NavLink to="/">Home</NavLink>}
+      {role == "ADMIN" && <NavLink to="/add">Add Employee</NavLink>}
+     {!!role &&<StatisticsSelector></StatisticsSelector>}
+     {!!role && <NavLink to="/logout">{username}</NavLink>}
+      {!role && <NavLink to="/login">Login</NavLink>}
+      {!role && <Navigate to="/login"/>}
      <ColorModeButton></ColorModeButton>
       
    </HStack>
