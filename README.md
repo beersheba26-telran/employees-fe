@@ -1,6 +1,6 @@
 #  Authentication and Authorization Flows
 ## Zustand Global State management
-### UserData shoul be global state
+### UserDataStrore should be global state
 ### Create useUserData hook for managing UserData state
 ## Login page
 ### Login form
