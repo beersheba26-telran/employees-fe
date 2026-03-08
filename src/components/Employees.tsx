@@ -1,8 +1,12 @@
 import { Avatar, Spinner, Stack, Table } from "@chakra-ui/react";
-import useEmployees from "../services/hooks/useEmployees";
-
-const Employees = () => {
-  const { employees, isLoading } = useEmployees();
+import { FC } from "react";
+import { Employee } from "../models/Employee";
+type Props = {
+  employees: Employee[],
+  isLoading: boolean
+}
+const Employees: FC<Props> = ({employees, isLoading}) => {
+  
   return (
     <>
       {isLoading && <Spinner></Spinner>}
