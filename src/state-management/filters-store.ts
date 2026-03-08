@@ -1,6 +1,6 @@
 import {create} from "zustand"
 import employeesConfig from "../config/employees-config"
-type FiltersStore = {
+export type FiltersStore = {
     department: string,
     minSalary: number,
     maxSalary: number,
