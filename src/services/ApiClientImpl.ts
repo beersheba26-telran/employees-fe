@@ -2,11 +2,14 @@ import axios, { AxiosRequestConfig } from "axios";
 import ApiClient from "./ApiClient";
 import { type Employee } from "../models/Employee";
 import { type EmployeeUpdater } from "../models/EmployeeUpdater";
+import { FilterFields } from "../models/FilterFields";
 const axiosInstance = axios.create({
     baseURL: "http://localhost:3000/"
 })
 class ApiClientJsonServer implements ApiClient {
-    async getEmployees(config?: AxiosRequestConfig): Promise<Employee[]> {
+    async getEmployees(filters?: FilterFields): Promise<Employee[]> {
+        // FIXME if parameter "filters" contains value to get config for Axios
+        let config: AxiosRequestConfig | undefined = undefined
         const response = await axiosInstance.get<Employee[]>("employees", config);
         return response.data
     }
