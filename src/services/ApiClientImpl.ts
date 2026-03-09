@@ -30,8 +30,9 @@ class ApiClientJsonServer implements ApiClient {
         const emplRes: Employee = await axiosInstance.post("employees", empl);
         return emplRes
     }
-    deleteEmployee(id: string): Promise<Employee> {
-        throw new Error("Method not implemented.");
+    async deleteEmployee(id: string): Promise<Employee> {
+       const emplRes: Employee = await axiosInstance.delete(`employees/${id}`);
+        return emplRes
     }
     updateEmployee(updater: EmployeeUpdater): Promise<Employee> {
         throw new Error("Method not implemented.");

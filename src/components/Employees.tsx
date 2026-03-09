@@ -4,6 +4,10 @@ import { Employee } from "../models/Employee";
 import {FaSort, FaSortUp, FaSortDown} from "react-icons/fa"
 import { Order, SortByFieldsStore, SortField, useSortByFields } from "../state-management/sort-store";
 import orderBy from "lodash/orderBy"
+import { useUserData } from "../state-management/auth-store";
+import useEmployeesMutation from "../services/hooks/useEmployeesMutation";
+import apiClient from "../services/ApiClientImpl";
+import ConfirmDialog from "./ConfirmationDialog";
 type Props = {
   employees: Employee[]
   isLoading: boolean
@@ -29,6 +33,8 @@ function getSortingFields(sortOptions:SortByFieldsStore): SortField[] {
       return keys.filter(k => sortOptions[k] == "asc" || sortOptions[k] == "desc")
 }
 const Employees: FC<Props> = ({employees, isLoading}) => {
+  const role = useUserData(s => s.role)
+  const mutationDel = useEmployeesMutation<Employee, string>((id) => apiClient.deleteEmployee(id))
   const sortOptions = useSortByFields();
   const sortedEmployees: Employee[] = useMemo(()=>{
     const sortFields: SortField[] = getSortingFields(sortOptions);
@@ -52,6 +58,7 @@ const Employees: FC<Props> = ({employees, isLoading}) => {
                 <Table.ColumnHeader>Department{getIcon("department", sortOptions)}</Table.ColumnHeader>
                 <Table.ColumnHeader>Salary{getIcon("salary", sortOptions)}</Table.ColumnHeader>
                 <Table.ColumnHeader hideBelow={"sm"}>Birthdate{getIcon("birthdate", sortOptions)}</Table.ColumnHeader>
+                {role == "ADMIN" && <Table.ColumnHeader ></Table.ColumnHeader>}
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -67,6 +74,11 @@ const Employees: FC<Props> = ({employees, isLoading}) => {
                   <Table.Cell >{empl.department}</Table.Cell>
                   <Table.Cell >{empl.salary}</Table.Cell>
                   <Table.Cell hideBelow={"sm"} >{empl.birthdate}</Table.Cell>
+                   { role === "ADMIN" && <Table.Cell >
+                       <ConfirmDialog content={`Deleting employee ${empl.fullName}` } onClose={(isDelete) => {
+                        isDelete && mutationDel.mutate(empl.id!)
+                       }} isPending={mutationDel.isPending}></ConfirmDialog>
+                      </Table.Cell>}
                 </Table.Row>
               ))}
             </Table.Body>
