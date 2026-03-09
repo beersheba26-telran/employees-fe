@@ -1,11 +1,20 @@
 import { Avatar, IconButton, Spinner, Stack, Table } from "@chakra-ui/react";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useMemo } from "react";
 import { Employee } from "../models/Employee";
 import {FaSort, FaSortUp, FaSortDown} from "react-icons/fa"
 import { Order, SortByFieldsStore, SortField, useSortByFields } from "../state-management/sort-store";
+import orderBy from "lodash/orderBy"
 type Props = {
-  employees: Employee[],
+  employees: Employee[]
   isLoading: boolean
+}
+function updateSortingState(field: SortField, sortOptions: SortByFieldsStore):void {
+    const order = sortOptions[field] ;
+    let newOrder: Order = "asc"
+    if (order != "no") {
+      newOrder = order == "asc" ? "desc" : "asc";
+    }
+    sortOptions.setOrder(field, newOrder)
 }
 function getIcon(field: SortField, sortOptions: SortByFieldsStore): ReactNode {
   const order = sortOptions[field] ;
@@ -13,10 +22,22 @@ function getIcon(field: SortField, sortOptions: SortByFieldsStore): ReactNode {
   if (order != "no") {
     result = order == "asc" ? <FaSortUp> </FaSortUp> : <FaSortDown></FaSortDown>
   }
-  return<IconButton size="xs" marginLeft={2}>{ result}</IconButton>;
+  return<IconButton size="xs" marginLeft={2} onClick={() => updateSortingState(field, sortOptions)}>{ result}</IconButton>;
+}
+function getSortingFields(sortOptions:SortByFieldsStore): SortField[] {
+      const keys: SortField[] = Object.keys(sortOptions) as SortField[]
+      return keys.filter(k => sortOptions[k] == "asc" || sortOptions[k] == "desc")
 }
 const Employees: FC<Props> = ({employees, isLoading}) => {
   const sortOptions = useSortByFields();
+  const sortedEmployees: Employee[] = useMemo(()=>{
+    const sortFields: SortField[] = getSortingFields(sortOptions);
+    let result: Employee[] = []
+    result = sortFields.length == 0 ? orderBy(employees, ["id"], ["asc"]) : orderBy(employees, sortFields,
+      sortFields.map(sf => (sortOptions as any)[sf])
+     )
+    return result;
+  }, [employees, sortOptions] )
   return (
     <>
       {isLoading && <Spinner></Spinner>}
@@ -34,7 +55,7 @@ const Employees: FC<Props> = ({employees, isLoading}) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {employees.map((empl) => (
+              {sortedEmployees.map((empl) => (
                 <Table.Row key={empl.id} >
                   <Table.Cell hideBelow={"sm"} >
                     <Avatar.Root size={{sm:"sm", lg: "lg"}} >
