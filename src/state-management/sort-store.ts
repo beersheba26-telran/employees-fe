@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { NonFunctionProps } from "../utils/util-types";
-type Order = "asc" | "desc" | "no";
-type SortByFieldsStore = {
+export type Order = "asc" | "desc" | "no";
+export type SortByFieldsStore = {
   department: Order;
   fullName: Order;
   salary: Order;
@@ -9,7 +9,7 @@ type SortByFieldsStore = {
   setOrder: (field: SortField, order: Order) => void;
   resetOrder: () => void;
 };
-type SortField = keyof SortByFieldsStore;
+export type SortField = keyof SortByFieldsStore;
 const defaultValues: NonFunctionProps<SortByFieldsStore> = {
   department: "no",
   fullName: "no",
