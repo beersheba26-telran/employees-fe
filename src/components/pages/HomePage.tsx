@@ -3,9 +3,14 @@ import useEmployees from '../../services/hooks/useEmployees';
 import Employees from '../Employees'
 import Filters from '../Filters';
 import { useFilters } from '../../state-management/filters-store';
+import { useMemo } from 'react';
+import { FilterFields } from '../../models/FilterFields';
 const HomePage = () => {
-  const { employees, isLoading } = useEmployees();
-  const resetToDefault = useFilters(s => s.resetToDefault)
+  const filters = useFilters();
+  const {department, minAge, minSalary,maxAge, maxSalary, resetToDefault} = filters;
+  const filterFields: FilterFields = useMemo(()=>({department, minAge, maxAge, minSalary, maxSalary}),[filters])
+  const { employees, isLoading } = useEmployees(filterFields);
+  
   return (
     <VStack>
       <HStack>

@@ -14,7 +14,7 @@ export type FiltersStore = {
   setMaxSalary: (maxSalary: number) => void;
   resetToDefault: () =>void
 };
-const defaultValues: NonFunctionProps<FiltersStore> = {
+export const defaultValues: NonFunctionProps<FiltersStore> = {
   department: "Departments",
   minSalary: employeesConfig.salary.min,
   maxSalary: employeesConfig.salary.max,
