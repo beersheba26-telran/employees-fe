@@ -8,6 +8,8 @@ import { useUserData } from "../state-management/auth-store";
 import useEmployeesMutation from "../services/hooks/useEmployeesMutation";
 import apiClient from "../services/ApiClientImpl";
 import ConfirmDialog from "./ConfirmationDialog";
+import { MdDelete } from "react-icons/md";
+
 type Props = {
   employees: Employee[]
   isLoading: boolean
@@ -77,7 +79,7 @@ const Employees: FC<Props> = ({employees, isLoading}) => {
                    { role === "ADMIN" && <Table.Cell >
                        <ConfirmDialog content={`Deleting employee ${empl.fullName}` } onClose={(isDelete) => {
                         isDelete && mutationDel.mutate(empl.id!)
-                       }} isPending={mutationDel.isPending}></ConfirmDialog>
+                       }} isPending={mutationDel.isPending} icon={<MdDelete></MdDelete>}></ConfirmDialog>
                       </Table.Cell>}
                 </Table.Row>
               ))}

@@ -1,13 +1,13 @@
 import { Button, Dialog, IconButton, Portal } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { useColorModeValue } from "./ui/color-mode";
-import { MdDelete } from "react-icons/md";
 interface Props {
   content: string;
-  onClose: (isDelete: boolean) => void;
+  onClose: (isOk: boolean) => void;
   isPending: boolean;
+  icon: ReactNode
 }
-const ConfirmDialog: FC<Props> = ({ content, onClose, isPending }) => {
+const ConfirmDialog: FC<Props> = ({ content, onClose, isPending, icon }) => {
   const bg = useColorModeValue("red.500", "red.200");
   const buttonsBackground = useColorModeValue("blue.500", "blue.200");
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ const ConfirmDialog: FC<Props> = ({ content, onClose, isPending }) => {
           aria-label="Delete"
           disabled={isPending}
         >
-          <MdDelete />
+         {icon}
         </IconButton>
       </Dialog.Trigger>
       <Portal>
