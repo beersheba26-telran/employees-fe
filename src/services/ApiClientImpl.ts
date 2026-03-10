@@ -35,7 +35,8 @@ class ApiClientJsonServer implements ApiClient {
         return res.data
     }
     async updateEmployee(updater: EmployeeUpdater): Promise<Employee> {
-        throw Error("Not implemented yet")
+        const res = await axiosInstance.patch<Employee>(`employees/${updater.id}`, updater.fields)
+        return res.data;
     }
     
 }
