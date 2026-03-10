@@ -41,7 +41,7 @@ const EmployeeForm: FC<Props> = ({ employee, submitter }) => {
           sm: 2,
         }}
         gap={10}
-        marginLeft={{
+        marginLeft={!!employee ? 0: {
           base: "16",
           lg: 72,
         }}
