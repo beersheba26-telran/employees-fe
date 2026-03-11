@@ -5,10 +5,7 @@ import {FaSort, FaSortUp, FaSortDown} from "react-icons/fa"
 import { Order, SortByFieldsStore, SortField, useSortByFields } from "../state-management/sort-store";
 import orderBy from "lodash/orderBy"
 import { useUserData } from "../state-management/auth-store";
-import useEmployeesMutation from "../services/hooks/useEmployeesMutation";
-import apiClient from "../services/ApiClientImpl";
-import ConfirmDialog from "./ConfirmationDialog";
-import { MdDelete } from "react-icons/md";
+
 import EditEmployee from "./EditEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 
@@ -38,7 +35,6 @@ function getSortingFields(sortOptions:SortByFieldsStore): SortField[] {
 }
 const Employees: FC<Props> = ({employees, isLoading}) => {
   const role = useUserData(s => s.role)
-  const mutationDel = useEmployeesMutation<Employee, string>((id) => apiClient.deleteEmployee(id))
   const sortOptions = useSortByFields();
   const sortedEmployees: Employee[] = useMemo(()=>{
     const sortFields: SortField[] = getSortingFields(sortOptions);
