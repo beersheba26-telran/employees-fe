@@ -1,13 +1,10 @@
-# Updating Employee Flow
-## EditEmployee component
-### View
-Icon Button with "editting" view
-### Logic
-- Hitting the Icon Button triggers appearing Modal Dialog with EmployeeForm intended for updating the given employee<br>
-- After submitting the form, define which fields have been updated<br>
--Only in the case there has been update of any updatable fields, create appropriate Updater object and mutate that object but mutation function calling updateEmployee method of ApiClient
-### Requirement
-Icon button should be disabled during mutation process
-
+# Showing employee's details in Portrait mode
+## Introducing EmployeeCard component
+- Showing details inside Chakra-ui Card component
+- In the case of user's role "ADMIN" showing control elements for deleting/editing employees
+### Hitting a control element triggers appearing appropriate diolog
+## Hitting ellipsis button on HomePage of portrait mode triggers EmployeeCard with details of selected Employee
+# Updating Employees component (HomePage for any mode except "Portrait")
+## Table view with "Full Name" sticky column
 
 
