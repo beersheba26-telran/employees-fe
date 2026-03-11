@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Box,
-  IconButton,
-  Spinner,
-  Stack,
-  Table,
-  Text,
-} from "@chakra-ui/react";
+import { Avatar, Box, Spinner, Stack, Table } from "@chakra-ui/react";
 import { FC, useMemo, useState } from "react";
 import { Employee } from "../models/Employee";
 import {
@@ -45,7 +37,7 @@ const EmployeesPortrait: FC<Props> = ({ employees, isLoading }) => {
           );
     return result;
   }, [employees, sortOptions]);
-  const [open, setOpen] = useState(false);
+  const [openedEmployeeId, setOpenedEmployeeId] = useState<string | null>(null);
   return (
     <>
       {isLoading && <Spinner></Spinner>}
@@ -77,16 +69,20 @@ const EmployeesPortrait: FC<Props> = ({ employees, isLoading }) => {
                   </Table.Cell>
                   <Table.Cell>{empl.fullName}</Table.Cell>
                   <Table.Cell>
-                    <Box onClick={()=>setOpen(true)}>
+                    <Box
+                      onClick={() => {
+                        setOpenedEmployeeId(empl.id ?? null);
+                      }}
+                    >
                       <DialogShaper
                         content={
                           <EmployeeCard
                             employee={empl}
-                            onClose={() => setOpen(false)}
+                            onClose={() => setOpenedEmployeeId(null)}
                           />
                         }
                         buttonName={<BsThreeDots />}
-                        open={open}
+                        open={openedEmployeeId === empl.id}
                       />
                     </Box>
                   </Table.Cell>

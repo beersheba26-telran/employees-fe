@@ -21,7 +21,7 @@ const HomePage = () => {
     <VStack>
       <HStack >
         <Filters/>
-        <Button onClick={() => {resetToDefault(); resetOrder()}}>{isPortrait?<FaSyncAlt></FaSyncAlt> :"Reset to Default"}</Button>
+        <Button size="xs" onClick={() => {resetToDefault(); resetOrder()}}>{isPortrait?<FaSyncAlt></FaSyncAlt> :"Reset to Default"}</Button>
       </HStack>
       {!isPortrait ? <Employees employees={employees} isLoading={isLoading}/> : 
       <EmployeesPortrait employees={employees} isLoading={isLoading}/>}

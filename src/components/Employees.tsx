@@ -48,16 +48,55 @@ const Employees: FC<Props> = ({employees, isLoading}) => {
     <>
       {isLoading && <Spinner></Spinner>}
       <Stack justifyContent={"center"} alignItems={"center"} height={"100%"}>
-        <Table.ScrollArea borderWidth="1px" rounded="md" height="75vh"
+        <Table.ScrollArea borderWidth="1px" rounded="md" height="70vh"
          width={{base:"95vw", md: "80vw"}}>
-          <Table.Root size={{base: "sm", sm: "md", lg: "lg"}} stickyHeader>
+          <Table.Root size={{base: "sm", sm: "md", lg: "lg"}} stickyHeader
+          css={{
+          "& [data-sticky]": {
+            position: "sticky",
+            zIndex: 1,
+            bg: "bg",
+
+            _after: {
+              content: '""',
+              position: "absolute",
+              pointerEvents: "none",
+              top: "0",
+              bottom: "-1px",
+              width: "32px",
+            },
+          },
+
+          "& [data-sticky=end]": {
+            _after: {
+              insetInlineEnd: "0",
+              translate: "100% 0",
+              shadow: "inset 8px 0px 8px -8px rgba(0, 0, 0, 0.16)",
+            },
+          },
+
+          "& [data-sticky=start]": {
+            _after: {
+              insetInlineStart: "0",
+              translate: "-100% 0",
+              shadow: "inset -8px 0px 8px -8px rgba(0, 0, 0, 0.16)",
+            },
+          },
+
+          "& thead tr": {
+            shadow: "0 1px 0 0 {colors.border}",
+            "&:has(th[data-sticky])": {
+              zIndex: 2,
+            },
+          },
+        }}>
             <Table.Header>
               <Table.Row bg="bg.subtle">
-                <Table.ColumnHeader hideBelow={"sm"}></Table.ColumnHeader>
-                <Table.ColumnHeader>Full Name {getIcon("fullName", sortOptions)}</Table.ColumnHeader>
+                <Table.ColumnHeader ></Table.ColumnHeader>
+                <Table.ColumnHeader  data-sticky="end" minW="160px" left="16">Full Name {getIcon("fullName", sortOptions)}</Table.ColumnHeader>
                 <Table.ColumnHeader>Department{getIcon("department", sortOptions)}</Table.ColumnHeader>
                 <Table.ColumnHeader>Salary{getIcon("salary", sortOptions)}</Table.ColumnHeader>
-                <Table.ColumnHeader hideBelow={"sm"}>Birthdate{getIcon("birthdate", sortOptions)}</Table.ColumnHeader>
+                <Table.ColumnHeader >Birthdate{getIcon("birthdate", sortOptions)}</Table.ColumnHeader>
                 {role == "ADMIN" && <Table.ColumnHeader ></Table.ColumnHeader>}
                  {role == "ADMIN" && <Table.ColumnHeader ></Table.ColumnHeader>}
               </Table.Row>
@@ -65,16 +104,16 @@ const Employees: FC<Props> = ({employees, isLoading}) => {
             <Table.Body>
               {sortedEmployees.map((empl) => (
                 <Table.Row key={empl.id} >
-                  <Table.Cell hideBelow={"sm"} >
+                  <Table.Cell data-sticky="end" left="0" >
                     <Avatar.Root size={{sm:"sm", lg: "lg"}} >
-                      <Avatar.Fallback name={empl .fullName} />
+                      <Avatar.Fallback name={empl.fullName} />
                       <Avatar.Image src={empl.avatar} />
                     </Avatar.Root>
                   </Table.Cell>
-                  <Table.Cell>{empl.fullName}</Table.Cell>
+                  <Table.Cell data-sticky="end" left="16">{empl.fullName}</Table.Cell>
                   <Table.Cell >{empl.department}</Table.Cell>
                   <Table.Cell >{empl.salary}</Table.Cell>
-                  <Table.Cell hideBelow={"sm"} >{empl.birthdate}</Table.Cell>
+                  <Table.Cell >{empl.birthdate}</Table.Cell>
                    { role === "ADMIN" && <Table.Cell >
                       <DeleteEmployee empl={empl}/>
                       </Table.Cell>}
