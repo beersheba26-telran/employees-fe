@@ -36,9 +36,9 @@ const EmployeeCard: FC<Props> = ({ employee, onClose }) => {
       <Card.Body gap="2">
         <Card.Title>{employee.fullName}</Card.Title>
         <Card.Description>
-          <Text as="p">Department: {employee.department}</Text>
-          <Text as="p">Salary: {employee.salary}</Text>
-          <Text as="p">Birthdate: {employee.birthdate}</Text>
+          <Text as="p"><Box as="span" fontWeight={"bold"} >Department</Box>: {employee.department}</Text>
+          <Text as="p"><Box as="span" fontWeight={"bold"}>Salary</Box>: {employee.salary}</Text>
+          <Text as="p"><Box as="span" fontWeight={"bold"}>Birthdate</Box>: {employee.birthdate}</Text>
         </Card.Description>
       </Card.Body>
       <Card.Footer gap="2" justifyContent="space-between" alignItems="center">
