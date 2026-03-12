@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosHeaders, AxiosRequestConfig } from "axios";
 import ApiClient from "./ApiClient";
 import { type Employee } from "../models/Employee";
 import { type EmployeeUpdater } from "../models/EmployeeUpdater";
@@ -27,6 +27,16 @@ class ApiClientJsonServer implements ApiClient {
         return response.data
     }
     async addEmployee(empl: Employee): Promise<Employee> {
+        //Only for test
+        if(empl.salary == 5001) {
+            throw createAxiosError(401, "Authentication error- Test")
+        }
+        if(empl.salary == 5002) {
+            throw createAxiosError(403, "Access Denied - Test")
+        }
+        if(empl.salary == 5003) {
+            throw createAxiosError(400, "Bad Request - Test")
+        }
         const res = await axiosInstance.post<Employee>("employees", empl);
         return res.data
     }
@@ -41,4 +51,8 @@ class ApiClientJsonServer implements ApiClient {
     
 }
 const apiClient: ApiClient = new ApiClientJsonServer();
+function createAxiosError(status: number, message: string): AxiosError {
+    return new AxiosError(message,"",undefined, undefined, {config: {headers: new AxiosHeaders()},
+    data: undefined, headers: new AxiosHeaders(),status,statusText: message})
+}
 export default apiClient;
