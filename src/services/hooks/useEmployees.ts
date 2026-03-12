@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../ApiClientImpl";
 import { FilterFields } from "../../models/FilterFields";
 
-export default function useEmployees(filters?: FilterFields): {employees: Employee[], isLoading: boolean,
-     error: AxiosError | null} {
+export default function useEmployees(filters?: FilterFields): {employees: Employee[], isLoading: boolean} {
         const queryKey: any[] = ["employees"];
         filters && queryKey.push(filters)
         const result = useQuery<Employee[], AxiosError>({
@@ -13,5 +12,8 @@ export default function useEmployees(filters?: FilterFields): {employees: Employ
             queryFn: () => apiClient.getEmployees(filters),
             staleTime: 3600_000
         })
-        return {employees: result.data || [], error: result.error, isLoading: result.isLoading}
+        if (result.error) {
+            throw result.error
+        }
+        return {employees: result.data || [],  isLoading: result.isLoading}
      }
