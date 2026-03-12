@@ -14,7 +14,7 @@ const AddEmployeePage = () => {
   return (
     <>
     {isHomeNavigate && <Navigate to="/" />}
-    <EmployeeForm submitter={(empl) => {mutation.mutate(empl); setHomeNavigate(true)}}></EmployeeForm>
+    <EmployeeForm submitter={(empl) => mutation.mutate(empl, {onSuccess: ()=>setHomeNavigate(true)})}></EmployeeForm>
     </>
     
   );
