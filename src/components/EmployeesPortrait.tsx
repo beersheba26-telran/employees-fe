@@ -10,6 +10,7 @@ import orderBy from "lodash/orderBy";
 import { BsThreeDots } from "react-icons/bs";
 import DialogShaper from "./DialogShaper";
 import EmployeeCard from "./EmployeeCard";
+import EmployeeDetails from "./EmployeeDetails";
 
 type Props = {
   employees: Employee[];
@@ -37,7 +38,6 @@ const EmployeesPortrait: FC<Props> = ({ employees, isLoading }) => {
           );
     return result;
   }, [employees, sortOptions]);
-  const [openedEmployeeId, setOpenedEmployeeId] = useState<string | null>(null);
   return (
     <>
       {isLoading && <Spinner></Spinner>}
@@ -69,22 +69,7 @@ const EmployeesPortrait: FC<Props> = ({ employees, isLoading }) => {
                   </Table.Cell>
                   <Table.Cell>{empl.fullName}</Table.Cell>
                   <Table.Cell>
-                    <Box
-                      onClick={() => {
-                        setOpenedEmployeeId(empl.id ?? null);
-                      }}
-                    >
-                      <DialogShaper
-                        content={
-                          <EmployeeCard
-                            employee={empl}
-                            onClose={() => setOpenedEmployeeId(null)}
-                          />
-                        }
-                        buttonName={<BsThreeDots />}
-                        open={openedEmployeeId === empl.id}
-                      />
-                    </Box>
+                    <EmployeeDetails employee={empl}/>
                   </Table.Cell>
                 </Table.Row>
               ))}
