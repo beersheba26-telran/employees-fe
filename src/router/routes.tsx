@@ -7,10 +7,12 @@ import LayoutPage from "../components/pages/LayoutPage";
 import AddEmployeePage from "../components/pages/AddEmployeePage";
 import LoginPage from "../components/pages/LoginPage";
 import LogoutPage from "../components/pages/LogoutPage";
+import ErrorPage from "../components/pages/ErrorPage";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LayoutPage />,
+    errorElement: <ErrorPage/>,
     children: [
       { path: "", element: <HomePage /> },
       { path: "add", element: <AddEmployeePage /> },
