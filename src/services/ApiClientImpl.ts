@@ -5,54 +5,88 @@ import { type EmployeeUpdater } from "../models/EmployeeUpdater";
 import { FilterFields } from "../models/FilterFields";
 import { defaultValues } from "../state-management/filters-store";
 import { getIsoDateFromAge } from "../utils/date_functions";
+import { SERVICE_BASE_URL } from "../config/service_config";
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000/"
-})
+  baseURL: SERVICE_BASE_URL,
+});
 function getConfig(filters: FilterFields): AxiosRequestConfig {
-    const {department, minAge, maxAge,minSalary, maxSalary} = filters;
-      const maxDate = getIsoDateFromAge(minAge);
-      const minDate = getIsoDateFromAge(maxAge);
-    return {params: {department: department === defaultValues.department ? null : department,
-                     birthdate_gte: getIsoDateFromAge(defaultValues.maxAge) ==  minDate ? null : minDate,
-                     birthdate_lte:  getIsoDateFromAge(defaultValues.minAge) ==  maxDate ? null : maxDate,  
-                     salary_gte: defaultValues.minSalary == minSalary ? null : minSalary,
-                     salary_lte: defaultValues.maxSalary == maxSalary ? null : maxSalary
-    }}
+  const { department } = filters;
+
+  return {
+    params: {
+      department: department === defaultValues.department ? null : department,
+    },
+  };
+ 
 }
-class ApiClientJsonServer implements ApiClient {
-    async getEmployees(filters?: FilterFields): Promise<Employee[]> {
-        const config: AxiosRequestConfig | undefined = filters ?
-         getConfig(filters) : undefined
-        const response = await axiosInstance.get<Employee[]>("employees", config);
-        return response.data
-    }
-    async addEmployee(empl: Employee): Promise<Employee> {
-        //Only for test
-        if(empl.salary == 5001) {
-            throw createAxiosError(401, "Authentication error- Test")
-        }
-        if(empl.salary == 5002) {
-            throw createAxiosError(403, "Access Denied - Test")
-        }
-        if(empl.salary == 5003) {
-            throw createAxiosError(400, "Bad Request - Test")
-        }
-        const res = await axiosInstance.post<Employee>("employees", empl);
-        return res.data
-    }
-    async deleteEmployee(id: string): Promise<Employee> {
-       const res = await axiosInstance.delete<Employee>(`employees/${id}`);
-        return res.data
-    }
-    async updateEmployee(updater: EmployeeUpdater): Promise<Employee> {
-        const res = await axiosInstance.patch<Employee>(`employees/${updater.id}`, updater.fields)
-        return res.data;
-    }
-    
+function getPred(filters?: FilterFields): ((empl: Employee) => boolean) | undefined {
+  let result: ((empl: Employee) => boolean) | undefined = undefined;
+  if (filters) {
+    const { minAge, maxAge, minSalary, maxSalary } = filters;
+    const maxDate = getIsoDateFromAge(minAge ?? defaultValues.minAge);
+    const minDate = getIsoDateFromAge(maxAge ?? defaultValues.maxAge);
+    const maxSalaryPred = maxSalary ?? defaultValues.maxSalary;
+    const minSalaryPred = minSalary ?? defaultValues.minSalary;
+    result = (empl) => {
+      const { birthdate, salary } = empl;
+      return (
+        birthdate >= minDate &&
+        birthdate <= maxDate &&
+        salary >= minSalaryPred &&
+        salary <= maxSalaryPred
+      );
+    };
+  }
+
+  return result;
 }
-const apiClient: ApiClient = new ApiClientJsonServer();
+class ApiClientImpl implements ApiClient {
+  async getEmployees(filters?: FilterFields): Promise<Employee[]> {
+    const config: AxiosRequestConfig | undefined = filters
+      ? getConfig(filters)
+      : undefined;
+    const pred: ((empl: Employee) => boolean )| undefined = getPred(filters);
+    const response = await axiosInstance.get<Employee[]>("employees", config);
+    let employees = response.data
+    if (pred) {
+        employees = employees.filter(pred)
+    }
+    return employees;
+  }
+  async addEmployee(empl: Employee): Promise<Employee> {
+    //Only for test
+    if (empl.salary == 5001) {
+      throw createAxiosError(401, "Authentication error- Test");
+    }
+    if (empl.salary == 5002) {
+      throw createAxiosError(403, "Access Denied - Test");
+    }
+    if (empl.salary == 5003) {
+      throw createAxiosError(400, "Bad Request - Test");
+    }
+    const res = await axiosInstance.post<Employee>("employees", empl);
+    return res.data;
+  }
+  async deleteEmployee(id: string): Promise<Employee> {
+    const res = await axiosInstance.delete<Employee>(`employees/${id}`);
+    return res.data;
+  }
+  async updateEmployee(updater: EmployeeUpdater): Promise<Employee> {
+    const res = await axiosInstance.patch<Employee>(
+      `employees/${updater.id}`,
+      updater.fields,
+    );
+    return res.data;
+  }
+}
+const apiClient: ApiClient = new ApiClientImpl();
 function createAxiosError(status: number, message: string): AxiosError {
-    return new AxiosError(message,"",undefined, undefined, {config: {headers: new AxiosHeaders()},
-    data: undefined, headers: new AxiosHeaders(),status,statusText: message})
+  return new AxiosError(message, "", undefined, undefined, {
+    config: { headers: new AxiosHeaders() },
+    data: undefined,
+    headers: new AxiosHeaders(),
+    status,
+    statusText: message,
+  });
 }
 export default apiClient;
