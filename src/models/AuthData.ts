@@ -1,5 +1,5 @@
 export type LoginData = {
-    email: string
+    username: string
     password: string
 }
 export type UserData = {

@@ -16,7 +16,11 @@ const LoginPage: FC = () => {
       setUserData(userData);
       setHomeNavigate(true);
     } catch (error) {
-      errorMessage = (error as AxiosError).message;
+
+      errorMessage = (error as AxiosError).response?.data as string;
+      if (!errorMessage) {
+        errorMessage = "Network Error, repeate request later on"
+      }
     }
     return errorMessage;
   };

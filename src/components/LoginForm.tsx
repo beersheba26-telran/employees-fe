@@ -10,7 +10,6 @@ interface Props {
 const LoginForm: FC<Props> = ({submitter}) => {
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors },
     resetField
@@ -28,9 +27,9 @@ const [errorMessage, setErrorMessage] = useState<string>("");
         sm: 20,
         md: "80"
       }}>
-        <Field.Root invalid={!!errors.email}>
-          <Field.Label>Email</Field.Label>
-          <Input {...register("email", { required: true })} onFocus={() => {resetField("email"); setErrorMessage("")}}/>
+        <Field.Root invalid={!!errors.username}>
+          <Field.Label>Username</Field.Label>
+          <Input {...register("username", { required: true })} onFocus={() => {resetField("username"); setErrorMessage("")}}/>
           <Field.ErrorText>Email is required</Field.ErrorText>
         </Field.Root>
 

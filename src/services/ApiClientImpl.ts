@@ -6,8 +6,8 @@ import { FilterFields } from "../models/FilterFields";
 import { defaultValues } from "../state-management/filters-store";
 import { getIsoDateFromAge } from "../utils/date_functions";
 import { SERVICE_BASE_URL } from "../config/service_config";
-const axiosInstance = axios.create({
-  baseURL: SERVICE_BASE_URL,
+let axiosInstance = axios.create({
+  baseURL: SERVICE_BASE_URL
 });
 function getConfig(filters: FilterFields): AxiosRequestConfig {
   const { department } = filters;
@@ -41,6 +41,14 @@ function getPred(filters?: FilterFields): ((empl: Employee) => boolean) | undefi
   return result;
 }
 class ApiClientImpl implements ApiClient {
+    setAuth(token: string): void {
+        axiosInstance = axios.create({
+            baseURL: SERVICE_BASE_URL,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    }
   async getEmployees(filters?: FilterFields): Promise<Employee[]> {
     const config: AxiosRequestConfig | undefined = filters
       ? getConfig(filters)
